@@ -70,4 +70,77 @@ function publishHeartStory() {
   document.getElementById('story-text').value = '';
   message.textContent = 'Your story is now visible on this page.';
 }
+</script> 
+<script>
+(function () {
+  const storageKey = 'heartbridge-stories-v1';
+
+  function getStories() {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '[]');
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function showStory(story, container) {
+    const card = document.createElement('article');
+    card.style.cssText =
+      'background:white;padding:16px;margin-top:16px;border-radius:12px;border:1px solid #dce3ed;';
+
+    const heading = document.createElement('h3');
+    heading.textContent = story.title;
+
+    const paragraph = document.createElement('p');
+    paragraph.style.whiteSpace = 'pre-wrap';
+    paragraph.textContent = story.text;
+
+    card.append(heading, paragraph);
+    container.appendChild(card);
+  }
+
+  function renderStories() {
+    const container = document.getElementById('published-stories');
+    if (!container) return;
+
+    container.replaceChildren();
+    getStories().forEach(function (story) {
+      showStory(story, container);
+    });
+  }
+
+  window.publishHeartStory = function () {
+    const titleInput = document.getElementById('story-title');
+    const textInput = document.getElementById('story-text');
+    const message = document.getElementById('story-message');
+
+    const title = titleInput.value.trim();
+    const storyText = textInput.value.trim();
+
+    if (!title || !storyText) {
+      message.textContent = 'Please enter both a title and your story.';
+      return;
+    }
+
+    const stories = getStories();
+    stories.unshift({ title: title, text: storyText });
+
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(stories));
+      renderStories();
+
+      titleInput.value = '';
+      textInput.value = '';
+      message.textContent = 'Your story is saved in this browser.';
+    } catch (error) {
+      message.textContent = 'Could not save the story in this browser.';
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderStories);
+  } else {
+    renderStories();
+  }
+})();
 </script></body></html>
