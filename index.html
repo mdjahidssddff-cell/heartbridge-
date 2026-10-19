@@ -19,4 +19,55 @@
 document.querySelectorAll('.mood').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.mood').forEach(b=>b.classList.remove('selected'));button.classList.add('selected');document.getElementById('moodResult').textContent='তুমি বেছে নিয়েছ: '+button.dataset.mood+'। ধন্যবাদ—তোমার অনুভূতি গুরুত্বপূর্ণ।';}));
 const samples={bn:'তোমার জীবনের সবচেয়ে বড় স্বপ্ন কী?',en:'What is your biggest dream in life?',hi:'आपके जीवन का सबसे बड़ा सपना क्या है?'};document.getElementById('targetLang').addEventListener('change',e=>{document.getElementById('translatedDemo').textContent=samples[e.target.value]});
 document.getElementById('languageToggle').addEventListener('click',()=>alert('ভাষা নির্বাচন ও পুরো সাইটের অনুবাদ পরবর্তী ধাপে যুক্ত করা হবে।'));
+</script> 
+<!-- HEARTBRIDGE My Heart story feature -->
+<section id="my-heart" style="max-width:700px;margin:40px auto;padding:24px;background:#f4f7fb;color:#0b1e3b;border-radius:18px;font-family:Arial,sans-serif;">
+  <h2>❤️ My Heart</h2>
+  <p>Share your story. Let another human understand you.</p>
+
+  <label for="story-title">Story title</label>
+  <input id="story-title" type="text" maxlength="100" placeholder="Give your story a title"
+    style="display:block;box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccd5e0;border-radius:8px;">
+
+  <label for="story-text">Your story</label>
+  <textarea id="story-text" maxlength="3000" rows="6" placeholder="Write what is in your heart..."
+    style="display:block;box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccd5e0;border-radius:8px;"></textarea>
+
+  <button type="button" onclick="publishHeartStory()"
+    style="background:#0b1e3b;color:white;padding:12px 22px;border:0;border-radius:8px;">
+    Publish Story
+  </button>
+
+  <p id="story-message" role="status"></p>
+  <div id="published-stories"></div>
+</section>
+
+<script>
+function publishHeartStory() {
+  const title = document.getElementById('story-title').value.trim();
+  const story = document.getElementById('story-text').value.trim();
+  const message = document.getElementById('story-message');
+  const output = document.getElementById('published-stories');
+
+  if (!title || !story) {
+    message.textContent = 'Please enter both a title and your story.';
+    return;
+  }
+
+  const card = document.createElement('article');
+  card.style.cssText = 'background:white;padding:16px;margin-top:16px;border-radius:12px;border:1px solid #dce3ed;';
+
+  const heading = document.createElement('h3');
+  heading.textContent = title;
+  const paragraph = document.createElement('p');
+  paragraph.style.whiteSpace = 'pre-wrap';
+  paragraph.textContent = story;
+
+  card.append(heading, paragraph);
+  output.prepend(card);
+
+  document.getElementById('story-title').value = '';
+  document.getElementById('story-text').value = '';
+  message.textContent = 'Your story is now visible on this page.';
+}
 </script></body></html>
